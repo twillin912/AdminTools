@@ -1,0 +1,75 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" />
+    <title>@ViewData["Title"] - AdminTools</title>
+
+    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.css" />
+    <link rel="stylesheet" href="~/lib/tether/dist/css/tether.css" />
+    <link rel="stylesheet" href="~/lib/font-awesome/css/font-awesome.css" />
+    <link rel="stylesheet" href="~/lib/bootstrap-switch/dist/css/bootstrap3/bootstrap-switch.css" />
+    @RenderSection(name: "stylesheets", required: false)
+    <link rel="stylesheet" href="~/css/site.css" />
+
+
+</head>
+<body>
+    <nav class="navbar navbar-fixed-top navbar-dark bg-inverse">
+        <div class="navbar-brand">
+            IT Admin Tools
+            <button class="navbar-toggler hidden-sm-up" data-toggle="collapse" data-target="#navbar-1" title="Toggle Navigation">&#9776;</button>
+        </div>
+        <div class="collapse navbar-toggleable-xs" id="navbar-1">
+            @*<ul class="nav navbar-nav">
+                <menulink controller-name="Home" action-name="Index" menu-text="Home"></menulink>
+                <menulink controller-name="Asset" action-name="Index" menu-text="Assets"></menulink>
+                <menulink controller-name="User" action-name="Index" menu-text="Users"></menulink>
+                <menulink controller-name="Change" action-name="Index" menu-text="Change"></menulink>
+                <menulink controller-name="Tools" action-name="Index" menu-text="Tools"></menulink>
+                <menulink controller-name="Tools" action-name="Password" menu-text="Password Generator"></menulink>
+            </ul>*@
+            @await Component.InvokeAsync("NavigationMenu")
+            <ul class="nav navbar-nav pull-right">
+                <li class="nav-link">@User.Identity.Name</li>
+            </ul>
+        </div>
+    </nav>
+
+    <!-- Left side column. contains the logo and sidebar -->
+    <!-- Content Wrapper. Contains page content -->
+    <div class="container">
+        <!-- Content Header (Page header) -->
+        <section class="content-header">
+            <h3 class="page-header">@ViewData["Header"]</h3>
+            <span class="lead">
+                @ViewData["Description"]
+            </span>
+        </section>
+        <!-- Main content -->
+        <div class="container body-content">
+            @RenderBody()
+            <hr />
+        </div>
+    </div><!-- /.content-wrapper -->
+    <!-- Main Footer -->
+    <footer class="footer">
+        <div class="container text-muted">
+            @RenderSection(name: "footer", required: false)
+            <strong>Copyright &copy; 2016 <a href="#">Cambium Learning, Inc</a>.</strong> All rights reserved.
+        </div>
+    </footer>
+
+    <script src="~/lib/jquery/dist/jquery.js"></script>
+    <script src="~/lib/jquery-validation/dist/jquery.validate.js"></script>
+    <script src="~/lib/jquery-validation-unobtrusive/jquery.validate.unobtrusive.js"></script>
+    <script src="~/lib/tether/dist/js/tether.js"></script>
+    <script src="~/lib/bootstrap/dist/js/bootstrap.js"></script>
+    <script src="~/lib/bootstrap-switch/dist/js/bootstrap-switch.js"></script>
+    <script src="~/js/site.js"></script>
+
+    @RenderSection(name: "scripts", required: false)
+
+</body>
+</html>

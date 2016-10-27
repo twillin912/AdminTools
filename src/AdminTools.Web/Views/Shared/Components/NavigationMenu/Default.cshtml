@@ -1,0 +1,8 @@
+﻿@model AdminTools.Web.Navigation.Menu
+
+<ul class="nav navbar-nav">
+    @foreach (AdminTools.Web.Navigation.MenuItem menuItem in Model.MenuItems.Where(m => m.ParentId == 0).ToList())
+    {
+        <menulink controller-name="@menuItem.ControllerName" action-name="@menuItem.ActionName" menu-text="@menuItem.Name" menu-id="@menuItem.Id"></menulink>
+    }
+</ul>
