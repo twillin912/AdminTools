@@ -1,8 +1,10 @@
 ﻿using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
+using AdminTools.Data;
 using AdminTools.Web.Navigation;
 
 namespace AdminTools.Web
@@ -25,6 +27,8 @@ namespace AdminTools.Web
         public void ConfigureServices(IServiceCollection services)
         {
             // Add framework services.
+            services.AddDbContext<DataContext>(options =>
+                options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));
             services.AddMvc();
             services.AddScoped<MenuDataRepository>();
             services.Configure<IISOptions>(options =>
@@ -34,7 +38,7 @@ namespace AdminTools.Web
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, IHostingEnvironment env, ILoggerFactory loggerFactory)
+        public void Configure(IApplicationBuilder app, IHostingEnvironment env, ILoggerFactory loggerFactory, DataContext context)
         {
             loggerFactory.AddConsole(Configuration.GetSection("Logging"));
             loggerFactory.AddDebug();
@@ -62,6 +66,8 @@ namespace AdminTools.Web
                     template: "{*any}",
                     defaults: new { controller = "Home", action = "Error", id = "404" });
             });
+
+            DataContextSeedData.Seed(context);
 
         }
     }
