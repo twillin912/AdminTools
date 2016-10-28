@@ -119,11 +119,3 @@ on_finish:
 #---------------------------------#
 
 notifications:
-
-  # Email
-  - provider: Email
-    to:
-      - $env:notify_email
-    subject: 'Build {{status}}'                  # optional
-    message: "{{message}}, {{commitId}}, ..."    # optional
-    on_build_status_changed: true
