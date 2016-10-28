@@ -19,8 +19,10 @@ namespace AdminTools.Web.Navigation
             MenuList = new Menu();
             MenuList.MenuItems.Add(new MenuItem(100, "Home", "Index", "Home", 0));
 
-            MenuList.MenuItems.Add(new MenuItem(400, "Tools", "", "Tools", 0));
-            MenuList.MenuItems.Add(new MenuItem(401, "Tools", "Password", "Password Generator", 400));
+                MenuList.MenuItems.Add(new MenuItem(400, "Change", "", "Changes", 0));
+                MenuList.MenuItems.Add(new MenuItem(401, "Change", "Index", "List Changes", 400));
+            MenuList.MenuItems.Add(new MenuItem(900, "Tools", "", "Tools", 0));
+            MenuList.MenuItems.Add(new MenuItem(901, "Tools", "Password", "Password Generator", 900));
 
             return Task.FromResult<Menu>(MenuList);
         }

@@ -1,4 +1,5 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using AdminTools.Data.Models;
+using Microsoft.EntityFrameworkCore;
 
 namespace AdminTools.Data
 {
@@ -10,6 +11,9 @@ namespace AdminTools.Data
         }
 
 
+		// Change related classes
+        public DbSet<Change> Changes { get; set; }
+        public DbSet<RiskLevel> Risk { get; set; }
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
 
