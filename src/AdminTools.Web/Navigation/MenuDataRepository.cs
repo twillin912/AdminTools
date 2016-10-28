@@ -19,6 +19,9 @@ namespace AdminTools.Web.Navigation
             MenuList = new Menu();
             MenuList.MenuItems.Add(new MenuItem(100, "Home", "Index", "Home", 0));
 
+                MenuList.MenuItems.Add(new MenuItem(200, "Asset", "", "Assets", 0));
+                MenuList.MenuItems.Add(new MenuItem(201, "Asset", "Index", "List Assets", 200));
+                MenuList.MenuItems.Add(new MenuItem(202, "Asset", "Index", "Create Asset", 200));
             MenuList.MenuItems.Add(new MenuItem(400, "Tools", "", "Tools", 0));
             MenuList.MenuItems.Add(new MenuItem(401, "Tools", "Password", "Password Generator", 400));
 
