@@ -9,46 +9,66 @@
 #---------------------------------#
 
 # version format
-version: 0.1.{build}-{branch}
+version: 0.0.0.{build}.{branch}
+
+pull_requests:  
+  do_not_increment_build_number: true
 
 # branches to build
 branches:
+  # whitelist
   only:
     - master
     - develop
-    - /release.*/
+
+# Skipping commits with particular message or from specific user
+# skip_commits:
+#   message: /Created.*\.(png|jpg|jpeg|bmp|gif)/      # Regex for matching commit message
+#   author: John                                      # Commit author's username, name, email or regexp maching one of these.
+
+# Skipping commits affecting specific files (GitHub only). More details here: /docs/appveyor-yml
+skip_commits:
+  files:
+    - docs/*
 
 #---------------------------------#
 #    environment configuration    #
 #---------------------------------#
 
-environment:
-  # Don't report back to the mothership
-  DOTNET_CLI_TELEMETRY_OPTOUT: 1
-  notify_email:
-    secure: B/pszqp3uDSr0AilztIkE8L55g3HY7dsGkUuDpGE2vZozoHqaYSblB5feHtFG2v2
-
 # Build worker image (VM template)
-image: Visual Studio 2015
+os: Visual Studio 2015
 
 # scripts that are called at very beginning, before repo cloning
 init:
-- ps: $Env:LABEL = "alpha-" + $Env:APPVEYOR_BUILD_NUMBER.PadLeft(5, "0")
+  - cmd: git config --global core.autocrlf true
+  - cmd: dnvm upgrade
+  - cmd: dnvm update-self  
 
+# build cache to preserve files/folders between builds
 cache:
-#- packages -> **\packages.config  # preserve "packages" directory in the root of build folder but will reset it if packages.config is modified
-- '%USERPROFILE%\.nuget\packages'
+  - '%USERPROFILE%\.nuget\packages'
 
 # enable service required for build/tests
 services:
-#  - mssql2014           # start SQL Server 2014 Express
+  - iis                 # start IIS
+  - mssql2012sp1        # start SQL Server 2014 Express
 
-# scripts that run after cloning repository
 install:
-  # by default, all script lines are interpreted as batch
-  #- echo This is batch
-  # to run script as a PowerShell command prepend it with ps:
-  #- ps: Write-Host 'This is PowerShell'
+  - cmd: set semantic_version=%APPVEYOR_BUILD_VERSION:~0,5%
+  - cmd: echo Version - %semantic_version%
+  - cmd: nuget sources add -Name api.nuget.org -Source https://api.nuget.org/v3/index.json
+
+# Automatically register private account and/or project AppVeyor NuGet feeds.
+nuget:
+  account_feed: true
+  disable_publish_on_pr: true     # disable publishing of .nupkg artifacts to
+                                  # account/project feeds for pull request builds
+assembly_info:
+  patch: true
+  file: '**\AssemblyInfo.*'
+  assembly_version: '$(semantic_version).{build}'
+  assembly_file_version: '$(semantic_version).{build}'
+  assembly_informational_version: '$(semantic_version)'
 
 #---------------------------------#
 #       build configuration       #
@@ -57,33 +77,34 @@ install:
 # build platform, i.e. x86, x64, Any CPU. This setting is optional.
 platform: Any CPU
 
-# build Configuration, i.e. Debug, Release, etc.
-configuration: Release
-
-build:
-  parallel: true                  # enable MSBuild parallel builds
-  project: AdminTools.sln      # path to Visual Studio solution or project
-  publish_wap: true               # package Web Application Projects (WAP) for Web Deploy
-  verbosity: normal
+# to add several configurations to build matrix:
+configuration:
+  - Debug
+  - Release
 
 # scripts to run before build
 before_build:
-- appveyor-retry dotnet restore -v Minimal
-
-# to run your custom scripts instead of automatic MSBuild
-build_script:
-- dotnet build "src\AdminTools.Data" -c %CONFIGURATION% --no-dependencies --version-suffix %LABEL%
-- dotnet build "src\AdminTools.Services" -c %CONFIGURATION% --no-dependencies --version-suffix %LABEL%
-- dotnet build "src\AdminTools.Web" -c %CONFIGURATION% --no-dependencies --version-suffix %LABEL%
+  - appveyor-retry dotnet restore -v Minimal ./src/AdminTools.Data
+  - appveyor-retry dotnet restore -v Minimal ./src/AdminTools.Services
+  - appveyor-retry dotnet restore -v Minimal ./src/AdminTools.Web
 
 # scripts to run *after* solution is built and *before* automatic packaging occurs (web apps, NuGet packages, Azure Cloud Services)
 before_package:
 
 # scripts to run after build
 after_build:
-- dotnet pack "src\AdminTools.Data" -c %CONFIGURATION% --no-build --version-suffix %LABEL% -o artifacts
-- dotnet pack "src\AdminTools.Services" -c %CONFIGURATION% --no-build --version-suffix %LABEL% -o artifacts
-- dotnet pack "src\AdminTools.Web" -c %CONFIGURATION% --no-build --version-suffix %LABEL% -o artifacts
+  - cmd: dotnet pack --no-build ./src/AdminTools.Data
+  - cmd: dotnet pack --no-build ./src/AdminTools.Services
+  - cmd: dotnet pack --no-build ./src/AdminTools.Web
+
+# to run your custom scripts instead of automatic MSBuild
+build_script:
+  - cmd: dotnet build ./src/AdminTools.Data
+  - cmd: dotnet build ./src/AdminTools.Services
+  - cmd: dotnet build ./src/AdminTools.Web
+
+# to disable automatic builds
+#build: off
 
 #---------------------------------#
 #       tests configuration       #
@@ -91,18 +112,43 @@ after_build:
 
 test: off
 
+
 #---------------------------------#
 #      artifacts configuration    #
 #---------------------------------#
 
 artifacts:
-- path: artifacts\**\*.*
+  # pushing all *.nupkg files in build directory recursively
+  - path: '**\*.nupkg'
+    name: NuGet
 
 #---------------------------------#
 #     deployment configuration    #
 #---------------------------------#
 
-deploy: off
+# providers: Local, FTP, WebDeploy, AzureCS, AzureBlob, S3, NuGet, Environment
+# provider names are case-sensitive!
+deploy:
+
+    # Deploy to GitHub Releases
+  - provider: GitHub
+    auth_token:
+      secure: VLy0WpsfUW1i/jkuq4tyx3pBGVYX4f6orxsWfl7xM3RhwNE+r9VSTeNX9hj7jwH8
+    artifact: /.*\.nupkg/           # upload all NuGet packages to release assets
+    on:
+      branch: master                # release from master branch only
+
+# scripts to run before deployment
+before_deploy:
+
+# scripts to run after deployment
+after_deploy:
+
+# to run your custom scripts instead of provider deployments
+deploy_script:
+
+# to disable deployment
+#deploy: off
 
 #---------------------------------#
 #        global handlers          #
@@ -117,8 +163,9 @@ on_failure:
 # after build failure or success
 on_finish:
 
+
 #---------------------------------#
 #         notifications           #
 #---------------------------------#
 
-#notifications:
+# notifications: 
