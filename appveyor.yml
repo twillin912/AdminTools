@@ -41,7 +41,8 @@ os: Visual Studio 2015
 # scripts that are called at very beginning, before repo cloning
 init:
   - cmd: git config --global core.autocrlf true
-  - cmd: dnvm update
+  - cmd: dnvm upgrade
+  - cmd: dnvm update-self  
 
 # build cache to preserve files/folders between builds
 cache:
