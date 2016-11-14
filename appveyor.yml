@@ -93,6 +93,9 @@ before_package:
 
 # scripts to run after build
 after_build:
+  - cmd: dotnet pack --no-build ./src/AdminTools.Data
+  - cmd: dotnet pack --no-build ./src/AdminTools.Services
+  - cmd: dotnet pack --no-build ./src/AdminTools.Web
 
 # to run your custom scripts instead of automatic MSBuild
 build_script:
@@ -137,9 +140,6 @@ deploy:
 
 # scripts to run before deployment
 before_deploy:
-  - cmd: dotnet pack --no-build ./src/AdminTools.Data
-  - cmd: dotnet pack --no-build ./src/AdminTools.Services
-  - cmd: dotnet pack --no-build ./src/AdminTools.Web
 
 # scripts to run after deployment
 after_deploy:
