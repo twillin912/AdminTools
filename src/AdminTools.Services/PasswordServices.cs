@@ -11,13 +11,13 @@ namespace AdminTools.Services
         string GetPhoneticPassword(string password);
     }
 
-    public class PasswordServices : IPasswordServices //TODO: Fixup for Allow Symbols = false
+    public class PasswordServices : IPasswordServices
     {
         private const string UPPER_CASE = "ABCDEFGHJKLMNPQRSTUVWXYZ";
         private const string LOWER_CASE = "abcdefghijkmnopqrstuvwxyz";
         private const string NUMBERS = "23456789";
         private const string SYMBOLS = "!@#$%*";
-        private const string INVALIDCHARS = "O01lI=><(){}[]`'"; // TODO: Update characters
+        private const string INVALIDCHARS = "O01lI=><(){}[]`'";
 
         Random r = new Random();
 
@@ -41,7 +41,6 @@ namespace AdminTools.Services
             int rndlength = r.Next(48, 96);
             int start = r.Next(1, rndlength - length);
 
-            // TODO: Remove invalid characters
             string required = "";
             string password = "";
             required += RandomChar(UPPER_CASE);
