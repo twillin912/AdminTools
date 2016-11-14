@@ -84,9 +84,9 @@ configuration:
 
 # scripts to run before build
 before_build:
-  - cmd: dotnet restore ./src/AdminTools.Data
-  - cmd: dotnet restore ./src/AdminTools.Services
-  - cmd: dotnet restore ./src/AdminTools.Web
+  - appveyor-retry dotnet restore -v Minimal ./src/AdminTools.Data
+  - appveyor-retry dotnet restore -v Minimal ./src/AdminTools.Services
+  - appveyor-retry dotnet restore -v Minimal ./src/AdminTools.Web
 
 # scripts to run *after* solution is built and *before* automatic packaging occurs (web apps, NuGet packages, Azure Cloud Services)
 before_package:
