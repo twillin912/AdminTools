@@ -1,21 +1,22 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 14
-VisualStudioVersion = 14.0.25420.1
+# Visual Studio 15
+VisualStudioVersion = 15.0.26228.9
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{FFB9BFE8-87C1-417D-B473-1151F2E8CBD8}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{EFA33FEB-B2C8-43F2-8651-4202C77A029D}"
 	ProjectSection(SolutionItems) = preProject
 		appveyor.yml = appveyor.yml
-		global.json = global.json
+		LICENSE.md = LICENSE.md
+		README.md = README.md
 	EndProjectSection
 EndProject
-Project("{8BB2217D-0F2D-49D1-97BC-3654ED321F3B}") = "AdminTools.Web", "src\AdminTools.Web\AdminTools.Web.xproj", "{4DEAE0FC-5345-4063-8721-0A9C829F1F21}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AdminTools.Web", "src\AdminTools.Web\AdminTools.Web.csproj", "{4DEAE0FC-5345-4063-8721-0A9C829F1F21}"
 EndProject
-Project("{8BB2217D-0F2D-49D1-97BC-3654ED321F3B}") = "AdminTools.Services", "src\AdminTools.Services\AdminTools.Services.xproj", "{BBFF8A6A-0557-40D9-9069-C41A254D8F0B}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AdminTools.Services", "src\AdminTools.Services\AdminTools.Services.csproj", "{BBFF8A6A-0557-40D9-9069-C41A254D8F0B}"
 EndProject
-Project("{8BB2217D-0F2D-49D1-97BC-3654ED321F3B}") = "AdminTools.Data", "src\AdminTools.Data\AdminTools.Data.xproj", "{A2752DCA-5AFA-45C9-BD77-160FF219BE9D}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AdminTools.Data", "src\AdminTools.Data\AdminTools.Data.csproj", "{A2752DCA-5AFA-45C9-BD77-160FF219BE9D}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
